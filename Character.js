@@ -1,36 +1,30 @@
 /* ================================================================= */
-/*  Character.js — 캐릭터 페이지 & 모달 (JSON / 20칸 최적화 버전)      */
+/* Character.js — 캐릭터 페이지 & 모달 (JSON / 20칸 최적화 버전)      */
 /* ================================================================= */
 
 // ─────────────────────────────────────────────────────────────────
 // 1. 캐릭터 페이지 빌더 (레이아웃 좌우 대칭 & 정렬 완벽 교정판)
 // ─────────────────────────────────────────────────────────────────
-/* ================================================================= */
 
-// ─────────────────────────────────────────────────────────────────
-// 1. 캐릭터 페이지 화면 그리기 (레이아웃 설정)
-// ─────────────────────────────────────────────────────────────────
 // 설정 파일(Config.js)에 있는 캐릭터 데이터(charData)를 불러와서 HTML 코드로 만들어주는 함수입니다.
 function initCharacterPages() {
-    // 레이더 차트를 정중앙에 예쁘게 배치하기 위한 CSS 스타일을 추가합니다.
+    // ★ 에러 방지용: Config.js가 로드되지 않아 데이터가 없어도 화면이 뻗지 않게 막아줍니다.
+    if (typeof charData === 'undefined') {
+        console.warn('charData를 찾을 수 없어 빈 화면을 출력합니다.');
+        window.charData = [];
+    }
+
     var html = '<style>.stats-wrapper > *:not(.weapon-section):not(.inventory-section) { grid-column: 1; grid-row: 1; justify-self: center; align-self: center; margin-top:10px; }</style>';
     
-    // charData 배열에 있는 캐릭터 수만큼 반복해서 화면을 만듭니다. (4명이면 4번 반복)
     charData.forEach(function (c) {
         var slides = '';
-        // 1부부터 4부까지 총 4개의 탭(슬라이드)을 만듭니다.
         for (var i = 0; i < 4; i++) {
             slides +=
                 '<div class="phase-slide ' + (i === 0 ? 'active' : '') + '">' +
-                    // 캐릭터 이름과 상단 버튼 영역
-                    // ★ 시트 버튼: Config.js의 charData에서 sheetUrl 값을 링크로 사용합니다.
-                    //   예) sheetUrl: 'https://ccfolia.com/rooms/...' 로 바꾸면 바로 연결됩니다.
-                    //   '#'으로 두면 링크 없이 버튼만 표시됩니다.
                     '<div class="char-header-row"><h2>' + c.title + '</h2>' +
                     '<a href="' + (c.sheetUrl || '#') + '" class="link-btn" ' +
                        'target="' + (c.sheetUrl && c.sheetUrl !== '#' ? '_blank' : '_self') + '" ' +
                        'rel="noopener" title="캐릭터 시트 열기">시트</a></div>' +
-                    // 프로필 사진과 기본 정보가 들어가는 영역
                     '<div class="profile-overview">' +
                         '<img src="' + c.img + '" class="main-profile-img" onclick="openLightbox(this.src)">' +
                         '<div class="profile-info-wrapper">' +
@@ -50,10 +44,8 @@ function initCharacterPages() {
                     '</div>' +
                     '<div class="divider-dots">• • •</div>' +
                     
-                    // 능력치 레이더 차트, 무기, 인벤토리가 들어가는 커다란 그리드(표) 영역입니다.
                     '<div class="stats-wrapper" data-stats="' + c.stats + '" data-color="' + c.color + '" style="display:grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap:10px 40px; align-items:start; justify-items:center;">' +
                         
-                        // 무기 목록을 보여주는 영역
                         '<div class="weapon-section" style="grid-column: 2; grid-row: 1; width:100%; justify-self:stretch;">' +
                             '<div class="weapon-display-wrapper" data-weapon="{}">' +
                                 '<div class="inv-header-wrapper" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">' +
@@ -66,14 +58,11 @@ function initCharacterPages() {
                             '</div>' +
                         '</div>' +
                         
-                        // 인벤토리(가방) 영역
                         '<div class="inventory-section" style="grid-column: 1 / -1; grid-row: 2; width:100%; justify-self:stretch; margin-top:25px;">' +
                             '<div class="inv-header-inventory" style="margin-bottom:15px;">' +
                                 '<div style="display:flex; align-items:center; justify-content:space-between; width:100%; gap:10px;">' +
                                     '<h3 style="margin:0; letter-spacing:1px; font-size:1.1rem; font-family:\'Nanum Myeongjo\', serif; color:var(--accent-color); white-space:nowrap;">Inventory</h3>' +
-                                    // 소지품/보관함 탭이 들어갈 빈 공간
                                     '<div class="inv-tab-slot" style="display:flex; flex:1; max-width:180px; min-width:140px; background:rgba(10,10,10,0.8); border:1px solid rgba(215,179,61,0.5); border-radius:24px; padding:4px;"></div>' +
-                                    // 우편함 버튼 (클릭하면 openMailboxModal 함수가 실행됨)
                                     '<button class="inv-mailbox-btn auth-btn" style="width:auto; margin:0; padding:6px 14px; font-size:0.75rem; border-radius:20px; white-space:nowrap; background:#2a2826; border:1px solid rgba(215,179,61,0.3); color:#e5c56d; box-shadow:0 2px 4px rgba(0,0,0,0.3);" onclick="openMailboxModal(\'char-' + c.id + '\',' + i + ')">우편함</button>' +
                                 '</div>' +
                             '</div>' +
@@ -82,17 +71,14 @@ function initCharacterPages() {
                         
                     '</div>' +
                     '<div class="divider-dots">• • •</div>' +
-                    // 백스토리 영역
                     '<h2>백스토리</h2>' +
                     '<p class="section-intro">개요 텍스트</p>' +
                     '<details><summary>분기점 1</summary><div class="details-content">내용</div></details>' +
                 '</div>';
         }
         
-        // 만들어진 4개의 슬라이드를 하나의 섹션으로 묶어줍니다.
         html +=
             '<section id="char-' + c.id + '" class="content-card">' +
-                // 1부~4부 탭 버튼들
                 '<div class="phase-tabs">' +
                     '<button class="phase-btn active" onclick="changePhase(this, 0)">1부</button>' +
                     '<button class="phase-btn"        onclick="changePhase(this, 1)">2부</button>' +
@@ -103,13 +89,16 @@ function initCharacterPages() {
             '</section>';
     });
     
-    // 최종적으로 완성된 HTML 덩어리를 웹페이지의 'character-pages-container' 위치에 쏙 집어넣습니다.
-    document.getElementById('character-pages-container').innerHTML = html;
+    var container = document.getElementById('character-pages-container');
+    if (container) container.innerHTML = html;
     
-    // 화면 그리기가 끝났으니 레이더 차트를 그리는 함수를 실행시킵니다.
     if (typeof drawAllRadarCharts === 'function') drawAllRadarCharts();
-    
     if (typeof window.refreshInventoryPreviews === 'function') window.refreshInventoryPreviews();
+}
+
+// 뼈대 생성이 완료되면 실행
+window.addEventListener('DOMContentLoaded', function() {
+    initCharacterPages();
 });
 
 // 화면에 보여지는 기본 인벤토리를 20칸의 빈 칸으로 채워주는 함수입니다.
