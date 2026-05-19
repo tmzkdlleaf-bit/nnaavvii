@@ -11,8 +11,7 @@
 // 1. 캐릭터 페이지 화면 그리기 (레이아웃 설정)
 // ─────────────────────────────────────────────────────────────────
 // 설정 파일(Config.js)에 있는 캐릭터 데이터(charData)를 불러와서 HTML 코드로 만들어주는 함수입니다.
-window.addEventListener('DOMContentLoaded', function() {
-    initCharacterPages();
+function initCharacterPages() {
     // 레이더 차트를 정중앙에 예쁘게 배치하기 위한 CSS 스타일을 추가합니다.
     var html = '<style>.stats-wrapper > *:not(.weapon-section):not(.inventory-section) { grid-column: 1; grid-row: 1; justify-self: center; align-self: center; margin-top:10px; }</style>';
     
