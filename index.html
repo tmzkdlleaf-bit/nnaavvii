@@ -22,8 +22,8 @@
 <!-- 3. 데이터베이스(Supabase)와 차트, 그리고 우리가 만든 기능(JS) 파일들을 연결하는 곳입니다. -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script <!--
-  ★★★ JavaScript 파일 로드 순서 — 절대로 순서를 바꾸지 마세요 ★★★
+<script 
+  <!-- ★★★ JavaScript 파일 로드 순서 — 절대로 순서를 바꾸지 마세요 ★★★
   각 파일 역할:
     Config.js                 : ★ 여기서만 설정 수정 (API 키, 캐릭터 정보, 시트 링크)
     Radar.js                  : 레이더(팔각형) 능력치 차트
@@ -39,8 +39,8 @@
 
   ★ 캐시 무효화 방법:
     파일 수정 후 브라우저에 이전 버전이 보이면 ?v=숫자를 올리세요.
-    예) Character.js?v=43  →  Character.js?v=44
--->
+    예) Character.js?v=43  →  Character.js?v=44 -->
+    
 <script src="Config.js?v=2" defer></script>
 <script src="Radar.js" defer></script>
 <script src="Map.js?v=1" defer></script>
