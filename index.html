@@ -22,7 +22,26 @@
 <!-- 3. 데이터베이스(Supabase)와 차트, 그리고 우리가 만든 기능(JS) 파일들을 연결하는 곳입니다. -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script 
+
+<script>
+  window.currentHomeIdx = 0;
+  window.addEventListener('DOMContentLoaded', function() {
+      if (typeof window.supabaseClient === 'undefined') {
+          console.warn("DB 연결 지연/실패: 임시 껍데기 모드로 UI를 렌더링합니다.");
+          window.supabaseClient = {
+              from: function() { return this; },
+              select: function() { return this; },
+              update: function() { return this; },
+              insert: function() { return this; },
+              delete: function() { return this; },
+              eq: function() { return this; },
+              order: function() { return this; },
+              single: async function() { return { data: null }; }
+          };
+      }
+  });
+</script>
+  
   <!-- ★★★ JavaScript 파일 로드 순서 — 절대로 순서를 바꾸지 마세요 ★★★
   각 파일 역할:
     Config.js                 : ★ 여기서만 설정 수정 (API 키, 캐릭터 정보, 시트 링크)
