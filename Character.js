@@ -111,7 +111,7 @@ window.addEventListener('DOMContentLoaded', function() {
     if (typeof drawAllRadarCharts === 'function') drawAllRadarCharts();
     
     if (typeof window.refreshInventoryPreviews === 'function') window.refreshInventoryPreviews();
-)
+});
 
 // 화면에 보여지는 기본 인벤토리를 20칸의 빈 칸으로 채워주는 함수입니다.
 function initDefaultInventories() {
